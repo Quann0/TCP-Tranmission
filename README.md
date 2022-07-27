@@ -1,2 +1,2 @@
 # TCP-Tranmission
-Tranmission data between TCP protocol
+Tranmission data between 2 PC with TCP protocol
