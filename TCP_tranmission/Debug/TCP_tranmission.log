@@ -1,3 +1,0 @@
-﻿  main.cpp
-C:\Users\QUAN\source\repos\TCP_tranmission\TCP_tranmission\main.cpp(7,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-  TCP_tranmission.vcxproj -> C:\Users\QUAN\source\repos\TCP_tranmission\Debug\TCP_tranmission.exe

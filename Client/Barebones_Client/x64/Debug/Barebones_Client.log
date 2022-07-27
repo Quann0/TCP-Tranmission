@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\QUAN\Desktop\baitest\sloankelly-youtube-source-repository-1eadfb1295e1\cpp\networking\BarebonesClient\Barebones_Client\main.cpp(92,75): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  Barebones_Client.vcxproj -> C:\Users\QUAN\Desktop\baitest\sloankelly-youtube-source-repository-1eadfb1295e1\cpp\networking\BarebonesClient\x64\Debug\Barebones_Client.exe
