@@ -42,6 +42,34 @@ void main()
 		string check;
 		cout << "nhap trang thai(send/recv): ";
 		cin >> check;
+		int bytesReceived;
+
+		string myTextfile;
+		string pathfile;
+		string Textfile;
+		char* temptextfile;
+
+		string textbuffer;
+
+		string temptext;
+		
+		char numtext1[10+sizeof(char)];
+
+		int numtext = 0;
+
+		cout << "Nhap path file send: ";
+		cin >> pathfile;
+		ifstream MyReadFile(pathfile);
+		//ofstream MyWriteFile("C:\\Users\\QUAN\\Desktop\\monhoc\\Nhom4\\text.cpp");
+		while (getline(MyReadFile, myTextfile)) {
+			//// Output the text from the file
+			//cout << myTextfile;
+			Textfile += myTextfile;
+		}
+		
+		temptextfile = &Textfile[0];
+		sprintf_s(numtext1, "%d", Textfile.length());
+		//MyWriteFile.close();
 
 		sockaddr_in hint;
 		hint.sin_family = AF_INET;
@@ -94,15 +122,18 @@ void main()
 
 		//close sever
 		closesocket(listening);
-		send(clientsocket, "quan", 4 + 1, 0);
+		//send(clientsocket, "quan", 4 + 1, 0);
 		char buf[4096];
 
 		ZeroMemory(buf, 4096);
+		//ZeroMemory(temptext, 4096);
 		if (check == "send") {
+			send(clientsocket, "send", 4 + 1, 0);
 			//wait for client send data
 			cout << string("Ready", 0, 5) << endl;
 			//echo message back to client
-			int bytesReceived = recv(clientsocket, buf, 4096, 0);
+			bytesReceived = recv(clientsocket, buf, 4096, 0);
+			 // tin hieu da ket noi
 			if (bytesReceived == SOCKET_ERROR)
 			{
 				cerr << "GUi that bai" << endl;
@@ -111,16 +142,28 @@ void main()
 			{
 				cout << "Client disconnect" << endl;
 			}
-			send(clientsocket, "quan", 4 + 1, 0);
+			send(clientsocket, numtext1, 11, 0);
+			//numtext = Textfile.length();
+			while (numtext < Textfile.length())
+			{
+				temptext = Textfile.substr(numtext, 4096);
+				//strncpy_s(temptext, temptextfile + numtext,4096);
+				send(clientsocket, temptext.c_str(), 4096, 0);
+				//ZeroMemory(temptext, 4096);
+				numtext += 4096;
 
-
+			}
+			//cout << "SEVER(Send)>" << string(buf, 0, bytesReceived);
+			//cout << string(buf, 0, bytesReceived) << endl;
 
 			cout << string("Gui thanh cong", 0, 14) << endl;
 		}
-		else
+		else if(check == "recv")
 		{
+			send(clientsocket, "recv", 4 + 1, 0);
+
 			//wait for client send data
-			int bytesReceived = recv(clientsocket, buf, 4096, 0);
+			bytesReceived = recv(clientsocket, buf, 4096, 0); // tin hieu da ket noi
 			if (bytesReceived == SOCKET_ERROR)
 			{
 				cerr << "Error in recv(). Quitting.." << endl;
@@ -131,12 +174,14 @@ void main()
 				cout << "Client disconnect" << endl;
 				return;
 			}
-			//cout << string("Ready", 0, 5) << endl;
 			//echo message back to client
-			send(clientsocket, "ok", 2 + 1, 0);
-			cout << string(buf, 0, bytesReceived) << endl;
-			cout << string("Nhan thanh cong", 0, 15) << endl;
+			send(clientsocket, buf, bytesReceived + 1, 0);//gia tri nhan ve
+
+			cout <<"CLIENT(Send)>"<< string(buf, 0, bytesReceived) << endl;//xuat gia tri nhan ve
+			cout << "Status: Nhan thanh cong" << endl;
 		}
+		// Close the file
+		MyReadFile.close();
 		closesocket(clientsocket);
 	}
 	//while (true) 
