@@ -183,7 +183,7 @@ void main()
 			}
 			//
 
-			sprintf(st.numtext, "%d", (int)size);
+			sprintf_s(st.numtext, "%d", (int)size);
 			
 			send(clientsocket, st.numtext, 11, 0);
 			while (numtext < (int)size)
@@ -210,7 +210,7 @@ void main()
 			cout << "Nhap path file recv: ";
 			cin >> st.pathfile;
 			getchar();
-			cout << "SERVER(Send)> ";
+			cout << "CLIENT(Send)> ";
 			// Prompt the user for some text
 
 			sendResult = send(clientsocket, "ok", 2 + 1, 0);
