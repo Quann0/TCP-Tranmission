@@ -1,0 +1,7 @@
+Thư viện cần thiết:
+WS2tcpip.h
+ws2_32.lib
+
+tài liệu tham khảo:
+https://www.youtube.com/watch?v=WDn-htpBlnU
+https://www.youtube.com/watch?v=0Zr_0Jy8mWE&list=PLZo2FfoMkJeEogzRXEJeTb3xpA2RAzwCZ&index=9

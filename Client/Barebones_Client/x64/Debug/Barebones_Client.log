@@ -1,3 +1,6 @@
 ﻿  main.cpp
-C:\Users\QUAN\Desktop\baitest\sloankelly-youtube-source-repository-1eadfb1295e1\cpp\networking\BarebonesClient\Barebones_Client\main.cpp(92,75): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  Barebones_Client.vcxproj -> C:\Users\QUAN\Desktop\baitest\sloankelly-youtube-source-repository-1eadfb1295e1\cpp\networking\BarebonesClient\x64\Debug\Barebones_Client.exe
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(181,4): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(195,59): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(253,7): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Barebones_Client.vcxproj -> C:\Users\QUAN\source\repos\TCP_tranmission\Client\x64\Debug\Barebones_Client.exe

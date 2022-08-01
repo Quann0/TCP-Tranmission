@@ -1,14 +1,42 @@
 #include<iostream>
+#include<stdio.h>
 #include<WS2tcpip.h>
 #include<string>
 #include <sstream>
 #include <fstream>
+#include <filesystem>
 #include <cstdlib>
+#include <memory>
+#include <vector>
+#include <synchapi.h>
 #pragma comment (lib,"ws2_32.lib")
+
 using namespace std;
+
+
+struct Settings
+{
+	string filename;
+	string filesizerecv;
+	string pathfile;
+	string textfile;
+	string add;
+	int portnumber = 0;
+	char numtext[11] = {0};
+};
 
 void main() 
 {
+
+	Settings st;
+	st.filename = "";
+	string check;
+	int bytesReceived;
+	int sendResult;
+	int numtext;
+	int sizefile;
+	streampos size;
+	char* memblock;
 	//initialze winsock
 	WSADATA wsdata;
 	WORD ver = MAKEWORD(2, 2);
@@ -31,49 +59,32 @@ void main()
 		}
 
 		//set parameters
-		int port;
-		cout << "Nhap port: ";
-		cin >> port;
+
+		bytesReceived = 0;
+		sendResult = 0;
+		numtext = 0;
+		sizefile = 0;
+		st.portnumber = 0;
+		st.add = "";
+		check = "";
+		
+		ZeroMemory(st.numtext, 11);
+		cout << "Portnumber: ";
+		cin >> st.portnumber;
 		cout << endl;
-		string add;
+
 		cout << "Nhap dia chi: ";
-		cin >> add;
-		string userInput;
-		string check;
-		cout << "nhap trang thai(send/recv): ";
+		cin >> st.add;
+		
+		cout << "Mode(send/recv): ";
 		cin >> check;
-		int bytesReceived;
-
-		string myTextfile;
-		string pathfile;
-		string Textfile;
-		char* temptextfile;
-
-		string textbuffer;
-
-		string temptext;
 		
-		char numtext1[10+sizeof(char)];
 
-		int numtext = 0;
-
-		cout << "Nhap path file send: ";
-		cin >> pathfile;
-		ifstream MyReadFile(pathfile);
-		//ofstream MyWriteFile("C:\\Users\\QUAN\\Desktop\\monhoc\\Nhom4\\text.cpp");
-		while (getline(MyReadFile, myTextfile)) {
-			//// Output the text from the file
-			//cout << myTextfile;
-			Textfile += myTextfile;
-		}
 		
-		temptextfile = &Textfile[0];
-		sprintf_s(numtext1, "%d", Textfile.length());
-		//MyWriteFile.close();
-
+		
 		sockaddr_in hint;
 		hint.sin_family = AF_INET;
-		hint.sin_port = htons(port);
+		hint.sin_port = htons(st.portnumber);
 		hint.sin_addr.S_un.S_addr = INADDR_ANY;
 
 		bind(listening, (sockaddr*)&hint, sizeof(hint));
@@ -91,12 +102,12 @@ void main()
 
 
 
-		for (int i = 0;i < add.length();i++)
+		for (int i = 0;i < st.add.length();i++)
 		{
-			if (add.at(i) == '.') add.at(i) = ' ';
+			if (st.add.at(i) == '.') st.add.at(i) = ' ';
 		}
-		istringstream is(add);
-		int n, i = 0, a[4];
+		istringstream is(st.add);
+		int n, i = 0, a[4] = {0};
 		while (is >> n) {
 			a[i++] = n;
 		}
@@ -111,12 +122,12 @@ void main()
 
 		if (getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
 		{
-			cout << host << "connected on port" << service << endl;
+			cout << host << "connected on st.portnumber" << service << endl;
 		}
 		else
 		{
 			inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-			cout << host << "connected on port" <<
+			cout << host << "connected on st.portnumber" <<
 				ntohs(client.sin_port) << endl;
 		}
 
@@ -124,89 +135,151 @@ void main()
 		closesocket(listening);
 		//send(clientsocket, "quan", 4 + 1, 0);
 		char buf[4096];
-
+		getchar();
 		ZeroMemory(buf, 4096);
-		//ZeroMemory(temptext, 4096);
 		if (check == "send") {
+			cout << "Nhap path file send: ";
+			getline(cin,st.pathfile);
+
+
+
+			
+
+			ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
+
+			size = file.tellg();
+
+			memblock = new char[size];
+			file.seekg(0, ios::beg);
+			file.read(memblock, size);
+			file.close();
+			
+			for (int i = st.pathfile.length() - 1;i >= 0;i--)
+			{
+				if (st.pathfile.at(i) == '\\')
+				{
+					st.filename = st.pathfile.substr(i + 1);
+					break;
+				}
+			}
+
 			send(clientsocket, "send", 4 + 1, 0);
+			
 			//wait for client send data
 			cout << string("Ready", 0, 5) << endl;
 			//echo message back to client
 			bytesReceived = recv(clientsocket, buf, 4096, 0);
 			 // tin hieu da ket noi
+			send(clientsocket, st.filename.c_str(), st.filename.length(), 0);
+
 			if (bytesReceived == SOCKET_ERROR)
 			{
 				cerr << "GUi that bai" << endl;
+
 			}
 			if (bytesReceived == 0)
 			{
 				cout << "Client disconnect" << endl;
 			}
-			send(clientsocket, numtext1, 11, 0);
-			//numtext = Textfile.length();
-			while (numtext < Textfile.length())
+			//
+
+			sprintf(st.numtext, "%d", (int)size);
+			
+			send(clientsocket, st.numtext, 11, 0);
+			while (numtext < (int)size)
 			{
-				temptext = Textfile.substr(numtext, 4096);
-				//strncpy_s(temptext, temptextfile + numtext,4096);
-				send(clientsocket, temptext.c_str(), 4096, 0);
-				//ZeroMemory(temptext, 4096);
+				send(clientsocket, memblock+numtext, 4096, 0);
 				numtext += 4096;
-
 			}
-			//cout << "SEVER(Send)>" << string(buf, 0, bytesReceived);
-			//cout << string(buf, 0, bytesReceived) << endl;
 
-			cout << string("Gui thanh cong", 0, 14) << endl;
+			if (numtext >= (int)size)
+				cout << string("Gui thanh cong", 0, 14) << endl;
+			else 
+			{
+				closesocket(clientsocket);
+				continue;
+			}
+			delete[] memblock;
 		}
 		else if(check == "recv")
 		{
+			
 			send(clientsocket, "recv", 4 + 1, 0);
+			
+			ZeroMemory(buf, 4096);
+			cout << "Nhap path file recv: ";
+			cin >> st.pathfile;
+			getchar();
+			cout << "SERVER(Send)> ";
+			// Prompt the user for some text
 
-			//wait for client send data
-			bytesReceived = recv(clientsocket, buf, 4096, 0); // tin hieu da ket noi
-			if (bytesReceived == SOCKET_ERROR)
-			{
-				cerr << "Error in recv(). Quitting.." << endl;
-				return;
-			}
-			if (bytesReceived == 0)
-			{
-				cout << "Client disconnect" << endl;
-				return;
-			}
-			//echo message back to client
-			send(clientsocket, buf, bytesReceived + 1, 0);//gia tri nhan ve
+			sendResult = send(clientsocket, "ok", 2 + 1, 0);
 
-			cout <<"CLIENT(Send)>"<< string(buf, 0, bytesReceived) << endl;//xuat gia tri nhan ve
-			cout << "Status: Nhan thanh cong" << endl;
+			//file name
+			recv(clientsocket, buf, 4096, 0);
+			st.filename = string(buf, 4096);
+			st.pathfile += "\\" + string(buf, 4096);
+			ofstream MyOutFile(st.pathfile, ios::binary);
+			ZeroMemory(buf, 4096);
+			if (sendResult != SOCKET_ERROR)
+			{
+				bytesReceived = recv(clientsocket, st.numtext, 10 + sizeof(char), 0);
+				int numx = 0;
+				int x = atoi(st.numtext);
+				// Wait for response
+				
+				if (bytesReceived > 0)
+				{
+					do
+					{
+						if (x - numx < 4096)
+						{
+							recv(clientsocket, buf, x - numx, 0);
+							MyOutFile << string(buf, x - numx);
+						}
+						else
+						{
+							recv(clientsocket, buf, 4096, 0);
+							MyOutFile << string(buf, 4096);
+						}
+						numx += 4096;
+						ZeroMemory(buf, 4096);
+					} while (numx < x);
+
+					//							MyOutFile << textfile;
+											// Echo response to console
+
+					ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
+					size = file.tellg();
+					file.close();
+					if ((int)size)
+					{
+						cout << "nhan thanh cong" << endl;
+						cout << "Ten file: " << st.filename << endl;
+						cout << "Dung luong nhan duoc: " << (x / (int)size) * 100 << "%" << endl;
+					}
+					else
+					{
+						cerr << "Err #" << WSAGetLastError() << endl;
+						MyOutFile.close();
+						closesocket(clientsocket);
+						continue;
+					}
+					st.pathfile = "";
+					numx = 0;
+					ZeroMemory(st.numtext, 11);
+				}
+			}
+			// Close the file
+			
+			MyOutFile.close();
+			// Close the file
+			
 		}
 		// Close the file
-		MyReadFile.close();
 		closesocket(clientsocket);
 	}
-	//while (true) 
-	//{
-	//	ZeroMemory(buf, 4096);
 
-	//	//wait for client send data
-	//	int bytesReceived = recv(clientsocket, buf, 4096, 0);
-	//	if (bytesReceived == SOCKET_ERROR) 
-	//	{
-	//		cerr << "Error in recv(). Quitting.." << endl;
-	//		break;
-	//	}
-	//	if (bytesReceived == 0) 
-	//	{
-	//		cout << "Client disconnect" << endl;
-	//		break;
-	//	}
-	//	cout << string(buf, 0, bytesReceived) << endl;
-	//	//echo message back to client
-	//	send(clientsocket, buf, bytesReceived + 1,0);
-	//}
-	//close the socket
-	/*closesocket(clientsocket);*/
-	//cleanup winsock
 	WSACleanup();
 
 }
