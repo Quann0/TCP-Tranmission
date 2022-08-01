@@ -23,9 +23,16 @@ PC 2 will be send file  ex: E:\MyFile.exe
 PC 1 will be recv file  ex: E:\MyFolder
 
 
+<<<<<<< HEAD
 Enter "recv" : 
 
 PC 1 will be send file  ex: E:\MyFile.exe
 
 
 PC 2 will be recv file  ex: E:\MyFolder
+=======
+Enter "recv" : PC 1 will be send file  ex: E:\MyFile.exe
+               PC 2 will be recv file  ex: E:\MyFolder
+
+Max size of file: 1.5GB
+>>>>>>> 3d21315143699e97cc6f44ba5409d5ba3f9ff732
