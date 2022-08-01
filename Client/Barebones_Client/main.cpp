@@ -165,19 +165,23 @@ void main()
 		{
 			ZeroMemory(buf, 4096);
 			
-			cout << "Nhap path file send: ";
-			getline(cin, st.pathfile);
+			do
+			{
+				cout << "Nhap path file send: ";
+				getline(cin, st.pathfile);
+				ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
 
-			
-			
-			ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
-
-			size = file.tellg();
-
-			memblock = new char[size];
-			file.seekg(0, ios::beg);
-			file.read(memblock, size);
-			file.close();
+				size = file.tellg();
+				if (size < 1515000000)
+				{
+					memblock = new char[size];
+					file.seekg(0, ios::beg);
+					file.read(memblock, size);
+					file.close();
+					break;
+				}
+				else { cout << "Yeu cau be hon 1.5gb" << endl;file.close(); }
+			} while (1);
 			for (int i = st.pathfile.length() - 1;i >= 0;i--)
 			{
 				if (st.pathfile.at(i) == '\\')
