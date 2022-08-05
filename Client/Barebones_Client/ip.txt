@@ -14,8 +14,8 @@ Wireless LAN adapter Local Area Connection* 10:
 
 Wireless LAN adapter Wi-Fi:
 
-   Connection-specific DNS Suffix  . : 
+   Connection-specific DNS Suffix  . : Home
    Link-local IPv6 Address . . . . . : fe80::c5ac:ca69:3e65:78a1%4
-   IPv4 Address. . . . . . . . . . . : 192.168.41.107
+   IPv4 Address. . . . . . . . . . . : 192.168.1.20
    Subnet Mask . . . . . . . . . . . : 255.255.255.0
-   Default Gateway . . . . . . . . . : 192.168.41.1
+   Default Gateway . . . . . . . . . : 192.168.1.1
