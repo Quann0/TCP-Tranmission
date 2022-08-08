@@ -1,6 +1,8 @@
 ﻿  main.cpp
   The contents of <filesystem> are available only with C++17 or later.
 C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(29,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(105,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(150,26): warning C4244: 'initializing': conversion from 'std::streamoff' to 'unsigned int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(40,34): warning C4244: '=': conversion from 'std::streamoff' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(56,21): warning C4154: deletion of an array expression; conversion to pointer supplied
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(134,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(283,23): warning C4244: '=': conversion from 'std::streamoff' to 'unsigned int', possible loss of data
   TCP_tranmission.vcxproj -> C:\Users\QUAN\source\repos\TCP_tranmission\Sever\Debug\TCP_tranmission.exe

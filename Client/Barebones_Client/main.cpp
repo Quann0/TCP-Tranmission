@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 #pragma comment (lib, "ws2_32.lib")
-
+#define maxsize 1500000000
 using namespace std;
 
 string gethostip();
@@ -57,6 +57,7 @@ void main()
 	int bytesReceived = 0;
 	int sendResult;
 	char* memblock;
+	unsigned int datafilenumber = 0, checknum = 0;
 	streampos size;
 	do
 	{
@@ -133,8 +134,11 @@ void main()
 						}
 						numx += 4096;
 						ZeroMemory(buf, 4096);
-					} while (numx < x);
 
+					} while (numx < x);
+					/*recv(sock, buf, 4096, 0);
+					MyOutFile << string(buf, 4096);
+					ZeroMemory(buf, 4096);*/
 					// Echo response to console
 
 					ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
@@ -165,23 +169,10 @@ void main()
 		{
 			ZeroMemory(buf, 4096);
 			
-			do
-			{
-				cout << "Nhap path file send: ";
-				getline(cin, st.pathfile);
-				ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
+		
+			cout << "Nhap path file send: ";
+			getline(cin, st.pathfile);
 
-				size = file.tellg();
-				if (size < 1515000000)
-				{
-					memblock = new char[size];
-					file.seekg(0, ios::beg);
-					file.read(memblock, size);
-					file.close();
-					break;
-				}
-				else { cout << "Yeu cau be hon 1.5gb" << endl;file.close(); }
-			} while (1);
 			for (int i = st.pathfile.length() - 1;i >= 0;i--)
 			{
 				if (st.pathfile.at(i) == '\\')
@@ -190,6 +181,14 @@ void main()
 					break;
 				}
 			}
+
+			ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
+			size = (unsigned int)file.tellg();
+
+
+
+
+			send(sock, "send", 4 + 1, 0);
 
 			//wait for client send data
 			cout << string("Ready", 0, 5) << endl;
@@ -208,28 +207,80 @@ void main()
 				cout << "Client disconnect" << endl;
 			}
 			//
-
-			sprintf_s(st.numtext1, "%d", (int)size);
-
+			strcpy_s(st.numtext1, 11, to_string(size).c_str());
+			//st.numtext = to_string(size).c_str();
+			//sprintf_s(st.numtext, "%d", (unsigned int)size);
+			//st.numtext = to_string((int)size).c_str();
 			send(sock, st.numtext1, 11, 0);
-			while (st.numtext < (int)size)
-			{
-				send(sock, memblock + st.numtext, 4096, 0);
-				st.numtext += 4096;
-			}
-		
 
-			if (st.numtext >= (int)size)
-				cout << "Gui thanh cong" << endl;
+
+			do
+			{
+				if (size > 0)
+				{
+
+					if (datafilenumber >= size) break;
+					if (((unsigned int)size - datafilenumber) < maxsize)
+					{
+						memblock = new char[((unsigned int)size - datafilenumber)];
+						file.seekg(0, ios::beg);
+						file.read(memblock + datafilenumber, (datafilenumber - (unsigned int)size));
+						do
+						{
+							if ((unsigned int)size - st.numtext < 4096)
+							{
+								//send(clientsocket, memblock + numtext, (maxsize - numtext), 0);
+								send(sock, memblock + st.numtext, ((unsigned int)size - st.numtext), 0);
+							}
+							else
+							{
+								send(sock, memblock + st.numtext, 4096, 0);
+							}
+							st.numtext += 4096;
+						} while (st.numtext < ((unsigned int)size - datafilenumber));
+						//send(clientsocket, memblock + numtext, 4096, 0);
+					}
+					else
+					{
+						memblock = new char[maxsize];
+						file.seekg(datafilenumber, ios::beg);
+						file.read(memblock + datafilenumber, maxsize);
+						do
+						{
+							if (maxsize - st.numtext < 4096)
+							{
+								send(sock, memblock + st.numtext, (maxsize - st.numtext), 0);
+							}
+							else
+							{
+								send(sock, memblock + st.numtext, 4096, 0);
+							}
+							st.numtext += 4096;
+						} while (st.numtext < maxsize);
+					}
+
+					checknum += st.numtext;
+					st.numtext = 0;
+					datafilenumber += maxsize;
+					delete[] memblock;
+				}
+
+			} while (1);
+
+			if (checknum >= (int)size)
+				cout << string("Gui thanh cong", 0, 14) << endl;
 			else
 			{
-				cout << "Gui that bai" << endl;
 				closesocket(sock);
 				continue;
 			}
+			checknum = 0;
+			
+		
 			ZeroMemory(buf, 4096);
 			st.numtext = 0;
-			delete[] memblock;
+			file.close();
+			
 		}
 
 	closesocket(sock);

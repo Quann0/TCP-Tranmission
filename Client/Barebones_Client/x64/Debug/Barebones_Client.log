@@ -1,6 +1,8 @@
 ﻿  main.cpp
   The contents of <filesystem> are available only with C++17 or later.
-C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(185,4): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(199,59): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(257,7): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(176,4): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(198,59): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(240,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(270,17): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\QUAN\source\repos\TCP_tranmission\Client\Barebones_Client\main.cpp(308,7): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   Barebones_Client.vcxproj -> C:\Users\QUAN\source\repos\TCP_tranmission\Client\x64\Debug\Barebones_Client.exe

@@ -10,7 +10,7 @@
 #include <vector>
 #include <synchapi.h>
 #pragma comment (lib,"ws2_32.lib")
-
+#define maxsize 1500000000
 using namespace std;
 
 
@@ -27,15 +27,19 @@ struct Settings
 
 void main() 
 {
-
+	/*ifstream file("E:\\text\\dragonica.exe_20220516004454.dmp", ios::in | ios::binary );
+	ofstream MyOutFile("E:\\text\\data\\dragonica.exe_20220516004454.dmp", ios::in | ios::binary );
+	MyOutFile << file.rdbuf();
+	file.close();
+	MyOutFile.close();*/
 	Settings st;
 	st.filename = "";
 	string check;
 	int bytesReceived;
 	int sendResult;
-	int numtext;
+	int numtext,checknum = 0;
 	int sizefile;
-	streampos size;
+	unsigned int size,datafilenumber = 0;
 	char* memblock;
 	//initialze winsock
 	WSADATA wsdata;
@@ -64,6 +68,7 @@ void main()
 		sendResult = 0;
 		numtext = 0;
 		sizefile = 0;
+		datafilenumber = 0;
 		st.portnumber = 0;
 		st.add = "";
 		check = "";
@@ -138,31 +143,24 @@ void main()
 		getchar();
 		ZeroMemory(buf, 4096);
 		if (check == "send") {
-			do
-			{
+			
 				cout << "Nhap path file send: ";
 				getline(cin, st.pathfile);
-				ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
 
-				size = file.tellg();
-				if (size < 1515000000) 
+				for (int i = st.pathfile.length() - 1;i >= 0;i--)
 				{
-					memblock = new char[size];
-					file.seekg(0, ios::beg);
-					file.read(memblock, size);
-					file.close();
-					break;
+					if (st.pathfile.at(i) == '\\')
+					{
+						st.filename = st.pathfile.substr(i + 1);
+						break;
+					}
 				}
-				else { cout << "Yeu cau be hon 1.5gb"<<endl;file.close(); }
-			} while (1);
-			for (int i = st.pathfile.length() - 1;i >= 0;i--)
-			{
-				if (st.pathfile.at(i) == '\\')
-				{
-					st.filename = st.pathfile.substr(i + 1);
-					break;
-				}
-			}
+
+				ifstream file(st.pathfile, ios::in | ios::binary | ios::ate);
+				size = (unsigned int)file.tellg();
+
+
+			
 
 			send(clientsocket, "send", 4 + 1, 0);
 			
@@ -183,24 +181,76 @@ void main()
 				cout << "Client disconnect" << endl;
 			}
 			//
-
-			sprintf_s(st.numtext, "%d", (int)size);
-			
+			strcpy_s(st.numtext,11, to_string(size).c_str());
+			//st.numtext = to_string(size).c_str();
+			//sprintf_s(st.numtext, "%d", (unsigned int)size);
+			//st.numtext = to_string((int)size).c_str();
 			send(clientsocket, st.numtext, 11, 0);
-			while (numtext < (int)size)
-			{
-				send(clientsocket, memblock+numtext, 4096, 0);
-				numtext += 4096;
-			}
 
-			if (numtext >= (int)size)
+			
+			do
+			{
+				if (size > 0)
+				{
+
+					if (datafilenumber >= size) break;
+					if (((unsigned int)size - datafilenumber) < maxsize)
+					{
+						memblock = new char[((unsigned int)size - datafilenumber)];
+						file.seekg(0, ios::beg);
+						file.read(memblock + datafilenumber, (datafilenumber - (unsigned int)size));
+						do
+						{
+							if (size - numtext < 4096)
+							{
+								//send(clientsocket, memblock + numtext, (maxsize - numtext), 0);
+								send(clientsocket, memblock + numtext, (size - numtext), 0);
+							}
+							else
+							{
+								send(clientsocket, memblock + numtext, 4096, 0);
+							}
+							numtext += 4096;
+						} while (numtext < ((unsigned int)size - datafilenumber));
+						//send(clientsocket, memblock + numtext, 4096, 0);
+					}
+					else
+					{
+						memblock = new char[maxsize];
+						file.seekg(datafilenumber, ios::beg);
+						file.read(memblock + datafilenumber, maxsize);
+						do
+						{
+							if (maxsize - numtext < 4096)
+							{
+								send(clientsocket, memblock + numtext, (maxsize - numtext), 0);
+							}
+							else
+							{
+								send(clientsocket, memblock + numtext, 4096, 0);
+							}
+							numtext += 4096;
+						} while (numtext < maxsize);
+					}
+					
+					checknum += numtext;
+					numtext = 0;
+					datafilenumber += maxsize;
+					delete[] memblock;
+				}
+				
+			} while (1);
+
+			if (checknum >= (int)size)
 				cout << string("Gui thanh cong", 0, 14) << endl;
 			else 
 			{
 				closesocket(clientsocket);
 				continue;
 			}
-			delete[] memblock;
+			checknum = 0;
+			file.close();
+			
 		}
 		else if(check == "recv")
 		{
