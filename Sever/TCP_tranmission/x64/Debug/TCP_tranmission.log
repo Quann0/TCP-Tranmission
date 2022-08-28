@@ -1,8 +1,8 @@
 ﻿  main.cpp
   The contents of <filesystem> are available only with C++17 or later.
-C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(29,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(150,5): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(172,67): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(214,24): warning C4018: '<': signed/unsigned mismatch
-C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(304,23): warning C4244: '=': conversion from 'std::streamoff' to 'unsigned int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(28,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(155,5): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(177,67): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(219,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(309,23): warning C4244: '=': conversion from 'std::streamoff' to 'unsigned int', possible loss of data
   TCP_tranmission.vcxproj -> C:\Users\QUAN\source\repos\TCP_tranmission\Sever\x64\Debug\TCP_tranmission.exe

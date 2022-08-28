@@ -13,7 +13,6 @@
 #define maxsize 1500000000
 using namespace std;
 
-
 struct Settings
 {
 	string filename;
@@ -112,15 +111,12 @@ void main()
 			if (st.add.at(i) == '.') st.add.at(i) = ' ';
 		}
 		istringstream is(st.add);
-		int n, i = 0, a[4] = {0};
+		int n, i = 0;
+		UCHAR a[4] = { 0 };
 		while (is >> n) {
 			a[i++] = n;
 		}
-		client.sin_addr.S_un.S_un_b.s_b1 = a[0];
-		client.sin_addr.S_un.S_un_b.s_b2 = a[1];
-		client.sin_addr.S_un.S_un_b.s_b3 = a[2];
-		client.sin_addr.S_un.S_un_b.s_b4 = a[3];
-
+		memcpy(&client.sin_addr.S_un.S_un_b, a, 4);
 		clientsocket = accept(listening, (sockaddr*)&client, &clientsize);
 		ZeroMemory(host, NI_MAXHOST);
 		ZeroMemory(service, NI_MAXSERV);
