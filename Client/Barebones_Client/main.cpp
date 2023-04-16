@@ -97,7 +97,7 @@ void main()
 			
 			ZeroMemory(buf, 4096);
 			cout << "Nhap path file recv: ";
-			cin >> st.pathfile;
+			getline(cin,st.pathfile);
 			getchar();
 			cout << "SERVER(Send)> ";
 			// Prompt the user for some text

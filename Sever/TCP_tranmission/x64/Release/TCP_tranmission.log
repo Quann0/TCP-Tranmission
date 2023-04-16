@@ -1,6 +1,12 @@
-﻿  Generating code
-  0 of 249 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+﻿  main.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(28,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(146,5): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(168,67): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(210,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\QUAN\source\repos\TCP_tranmission\Sever\TCP_tranmission\main.cpp(300,23): warning C4244: '=': conversion from 'std::streamoff' to 'unsigned int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 249 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   TCP_tranmission.vcxproj -> C:\Users\QUAN\source\repos\TCP_tranmission\Sever\x64\Release\TCP_tranmission.exe
